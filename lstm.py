@@ -3,7 +3,7 @@ import numpy as np
 
 from tensorflow.models.rnn import rnn_cell
 from tensorflow.models.rnn import rnn
-from PRES_data import speeches
+import speeches
 
 num_epochs = 100 # number of times to go through entire training set.
 batch_size = len(speeches.source) # number of examples in each batch.
