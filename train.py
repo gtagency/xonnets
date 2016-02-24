@@ -1,3 +1,6 @@
+# Arr
+# Looted from https://github.com/sherjilozair/char-rnn-tensorflow
+
 import numpy as np
 import tensorflow as tf
 
