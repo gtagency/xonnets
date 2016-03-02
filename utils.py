@@ -24,14 +24,26 @@ class TextLoader():
 
     def preprocess(self, input_file, vocab_file, tensor_file):
         with open(input_file, "r") as f:
-            data = f.read()
-        counter = collections.Counter(data)
+            data = f.read()  # Reads entire file
+        counter = collections.Counter(data)  # dict of character counts
+
+        # count_pairs is a list of [char, count] pairs sorted by count
         count_pairs = sorted(counter.items(), key=lambda x: -x[1])
-        self.chars, _ = list(zip(*count_pairs))
+
+        # Transpose list of tuples into tuple of lists. Only keep sorted
+        # char list
+        self.chars, _ = list(zip(*count_pairs))  # char list sorted by count
         self.vocab_size = len(self.chars)
+
+        # Make dict with key=char and value=index (0, len)
+        # with 0 being with the most frequent char
         self.vocab = dict(zip(self.chars, range(len(self.chars))))
         with open(vocab_file, 'w') as f:
-            cPickle.dump(self.chars, f)
+            cPickle.dump(self.chars, f)  # Write vocab
+
+        # Get index (0, len) sorted with 0 being most freq char
+        # for each char in index.
+        # Put in array
         self.tensor = np.array(map(self.vocab.get, data))
         np.save(tensor_file, self.tensor)
 
