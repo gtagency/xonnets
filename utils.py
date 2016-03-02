@@ -49,7 +49,7 @@ class TextLoader():
 
     def load_preprocessed(self, vocab_file, tensor_file):
         with open(vocab_file) as f:
-            self.chars = cPickle.load(f)
+            self.chars = pickle.load(f)
         self.vocab_size = len(self.chars)
         self.vocab = dict(zip(self.chars, range(len(self.chars))))
         self.tensor = np.load(tensor_file)
