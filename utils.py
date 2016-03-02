@@ -39,7 +39,7 @@ class TextLoader():
         # with 0 being with the most frequent char
         self.vocab = dict(zip(self.chars, range(len(self.chars))))
         with open(vocab_file, 'w') as f:
-            cPickle.dump(self.chars, f)  # Write vocab
+            pickle.dump(self.chars, f)  # Write vocab
 
         # Get index (0, len) sorted with 0 being most freq char
         # for each char in index.
