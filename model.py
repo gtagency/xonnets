@@ -24,6 +24,7 @@ class Model():
 
         self.cell = cell = rnn_cell.MultiRNNCell([cell] * args.num_layers)
 
+
         self.input_data = tf.placeholder(tf.int32, [args.batch_size, args.seq_length])
         self.targets = tf.placeholder(tf.int32, [args.batch_size, args.seq_length])
         self.initial_state = cell.zero_state(args.batch_size, tf.float32)
@@ -75,7 +76,7 @@ class Model():
 
         ret = prime
         char = prime[-1]
-        for n in xrange(num):
+        for n in range(num):
             x = np.zeros((1, 1))
             x[0, 0] = vocab[char]
             feed = {self.input_data: x, self.initial_state:state}

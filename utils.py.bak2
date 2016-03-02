@@ -32,29 +32,26 @@ class TextLoader():
         self.vocab = dict(zip(self.chars, range(len(self.chars))))
         with open(vocab_file, 'wb') as f:
             cPickle.dump(self.chars, f)
-
-        self.tensor = list(map(self.vocab.get, data))
+        self.tensor = np.array(map(self.vocab.get, data))
         np.save(tensor_file, self.tensor)
 
     def load_preprocessed(self, vocab_file, tensor_file):
-        with open(vocab_file, 'rb') as f:
+        with open(vocab_file) as f:
             self.chars = cPickle.load(f)
         self.vocab_size = len(self.chars)
         self.vocab = dict(zip(self.chars, range(len(self.chars))))
         self.tensor = np.load(tensor_file)
-        self.num_batches = int(len(self.tensor) / (self.batch_size * self.seq_length))
+        self.num_batches = self.tensor.size / (self.batch_size * self.seq_length)
 
     def create_batches(self):
-        self.num_batches = int(len(self.tensor) / (self.batch_size * self.seq_length))
-
-        self.tensor = self.tensor[:len(self.tensor)]
+        self.num_batches = self.tensor.size / (self.batch_size * self.seq_length)
+        self.tensor = self.tensor[:self.num_batches * self.batch_size * self.seq_length]
         xdata = self.tensor
         ydata = np.copy(self.tensor)
         ydata[:-1] = xdata[1:]
         ydata[-1] = xdata[0]
-
-        self.x_batches = np.resize(np.resize(xdata, len(xdata) - len(xdata) % (self.batch_size * self.seq_length)), (self.num_batches, self.batch_size, self.seq_length))
-        self.y_batches = np.resize(np.resize(ydata, len(ydata) - len(ydata) % (self.batch_size * self.seq_length)), (self.num_batches, self.batch_size, self.seq_length))
+        self.x_batches = np.split(xdata.reshape(self.batch_size, -1), self.num_batches, 1)
+        self.y_batches = np.split(ydata.reshape(self.batch_size, -1), self.num_batches, 1)
 
 
     def next_batch(self):

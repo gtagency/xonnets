@@ -11,7 +11,6 @@ import six.moves.cPickle as cPickle
 
 from utils import TextLoader
 from model import Model
-from queue import *
 
 
 def main():
@@ -57,7 +56,6 @@ def train(args):
     with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
         tf.initialize_all_variables().run()
         saver = tf.train.Saver(tf.all_variables())
-
         for e in range(args.num_epochs):
             sess.run(tf.assign(model.lr, args.learning_rate * (args.decay_rate ** e)))
             data_loader.reset_batch_pointer()
@@ -76,6 +74,6 @@ def train(args):
                     checkpoint_path = os.path.join(args.save_dir, 'model.ckpt')
                     saver.save(sess, checkpoint_path, global_step = e * data_loader.num_batches + b)
                     print("model saved to {}".format(checkpoint_path))
-                o
+
 if __name__ == '__main__':
     main()
