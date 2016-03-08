@@ -25,6 +25,8 @@ class TextLoader():
     def preprocess(self, input_file, vocab_file, tensor_file):
         with open(input_file, "r") as f:
             data = f.read()
+        import regex as rf
+        inputs = rf.split(data, '[A-Z]+\.\n')
         counter = collections.Counter(data)
         count_pairs = sorted(counter.items(), key=lambda x: -x[1])
         self.chars, _ = list(zip(*count_pairs))
